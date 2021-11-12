@@ -45,4 +45,26 @@ struct tracecmd_input *tracecmd_buffer_instance_handle(struct tracecmd_input *ha
 
 void tracecmd_set_loglevel(enum tep_loglevel level);
 
+
+// Don't use these! These ids are machine-dependent
+#define WAKEUP_ID 316
+#define WAKEUP_NEW_ID 315
+#define SWITCH_ID 314
+#define EXIT_ID 311
+
+struct rbftrace_event_raw;
+struct recorder_data;
+
+/* Record */
+struct recorder_data *rbftrace_create_recorders(struct tracefs_instance *tracefs, int cpu_cnt);
+int rbftrace_create_recorder(int cpu, int *event_pipe, char *tracefs_path);
+void rbftrace_stop_threads(struct recorder_data *recorders, int cpu_cnt);
+void rbftrace_wait_threads(struct recorder_data *recorders, int cpu_cnt);
+
+/* Stream */
+int rbftrace_parse_event(struct tep_event *source, struct rbftrace_event_raw *target, struct tep_record *record);
+struct tracecmd_input *rbftrace_init_stream(int read_fd, int cpu, int cpu_cnt);
+int rbftrace_read_stream(struct recorder_data *recorders, int cpu_cnt, struct rbftrace_event_raw *rbf_event);
+void rbftrace_print_event(struct rbftrace_event_raw *event);
+
 #endif /* _TRACE_CMD_H */
