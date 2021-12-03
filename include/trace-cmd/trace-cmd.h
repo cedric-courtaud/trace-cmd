@@ -52,8 +52,27 @@ void tracecmd_set_loglevel(enum tep_loglevel level);
 #define SWITCH_ID 314
 #define EXIT_ID 311
 
-struct rbftrace_event_raw;
 struct recorder_data;
+
+#include <sys/types.h>
+
+struct rbftrace_event_raw {
+	unsigned short 	id;
+	unsigned long long 	ts;
+
+	/* Common fields. If sched_switch, this information refers to the prev process */
+	pid_t 	pid;
+	int 	prio;
+
+	/* sched_switch only */
+	long 	prev_state; // Current state of the previous process
+	pid_t 	next_pid;
+	int 	next_prio;
+
+	/* sched_wakeup only*/
+	int 	success;
+	int 	target_cpu;
+};
 
 /* Record */
 struct recorder_data *rbftrace_create_recorders(struct tracefs_instance *tracefs, int cpu_cnt);
