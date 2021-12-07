@@ -8,23 +8,6 @@
 
 #include "trace-cmd-private.h"
 
-struct rbftrace_event_raw {
-	unsigned short 	id;
-	unsigned long long 	ts;
-
-	/* Common fields. If sched_switch, this information refers to the prev process */
-	pid_t 	pid;
-	int 	prio;
-
-	/* sched_switch only */
-	long 	prev_state; // Current state of the previous process
-	pid_t 	next_pid;
-	int 	next_prio;
-
-	/* sched_wakeup only*/
-	int 	success;
-	int 	target_cpu;
-};
 
 /* Data of recorder threads */
 struct recorder_data {
